@@ -8,7 +8,7 @@ A Coastal-branded, responsive garden-building configurator based on the dealer's
 - Accessible width/depth sliders using concept size increments. Prima changes in 60cm steps; Log and Pro in 10cm steps. Exact structural dimensions remain subject to dealer review.
 - Automatic browser-local design saving and share links containing design choices only.
 - Name, email and UK postcode unlock the price and PDF. Phone and project details are optional; marketing defaults off.
-- Six-page personalised design proposal with concept plan, full specification, indicative budget, exclusions, site checklist, clickable contact actions and design QR.
+- Personalised design proposal with two high-resolution architectural 3D views, concept plan, full specification, indicative budget, exclusions, site checklist, clickable contact actions and design QR. Seven pages with 3D available; a six-page concept-plan fallback on devices without WebGL.
 - Accepted sessions support edited designs and fresh proposals without repeat lead capture.
 
 ## Development and deployment

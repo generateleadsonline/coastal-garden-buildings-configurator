@@ -13,7 +13,7 @@ const range = (low, high) => { const l = currency(low), h = currency(high); retu
 const systemDetails = { log: 'Interlocking timber construction. The final wall thickness and full specification are agreed with Coastal.', prima: 'Post-and-panel construction with modular dimensions. Coastal confirms the panels, openings and final specification.', pro: 'Post-and-beam construction. The selected layout and final build specification are agreed with Coastal.' };
 
 /** Creates a private, personalised concept guide from one accepted design/quote snapshot. */
-export async function generateProposal({ design, quote = {}, lead = {}, hero, plan, link } = {}) {
+export async function generateProposal({ design, quote = {}, lead = {}, hero, detail: secondView, plan, link } = {}) {
   const d = normalize(design || {}), q = quote || {}, person = clean(lead.name, 160) || 'Your Coastal design';
   const ref = clean(q.reference, 80) || 'COASTAL-DESIGN';
   const created = new Date(q.createdAt || Date.now());
@@ -22,6 +22,7 @@ export async function generateProposal({ design, quote = {}, lead = {}, hero, pl
   const title = `${d.width.toFixed(1)}m x ${d.depth.toFixed(1)}m ${label('system', d.system).toLowerCase()}`;
   const area = (d.width * d.depth).toFixed(1), fullPrice = range(q.low, q.high);
   let page = 0;
+  const pageTotal = imageData(secondView) ? 7 : 6;
   doc.setProperties({ title: `${ref} | Your Coastal garden room`, subject: 'Personalised concept design and indicative budget guide', author: 'Coastal Garden Buildings', keywords: 'Coastal, garden room, design, indicative budget, concept' });
 
   function font(size = 10, style = 'normal', color = C.dark) { doc.setFont('helvetica', style); doc.setFontSize(size); doc.setTextColor(color); }
@@ -59,7 +60,7 @@ export async function generateProposal({ design, quote = {}, lead = {}, hero, pl
   function footer() {
     rule(280); fit(`${ref} | Concept design`, M, 286, 84, 7.6, 'normal', C.muted);
     font(7.6, 'normal', C.muted); doc.text(`Coastal Garden Buildings | ${CONTACT.phone}`, 112, 286);
-    doc.text(`${page} / 6`, W - M, 292, { align: 'right' });
+    doc.text(`${page} / ${pageTotal}`, W - M, 292, { align: 'right' });
   }
   function newPage(name, subtitle) {
     if (page) doc.addPage(); page += 1;
@@ -120,7 +121,22 @@ export async function generateProposal({ design, quote = {}, lead = {}, hero, pl
   if (qr(resume, W - M - 30, 229, 30)) { font(6.8, 'normal', C.muted); doc.text('Scan to revisit your design', W - M - 15, 261.5, { align: 'center' }); }
   button('Reopen and refine my design', M, 263, 92, resume); button('Talk to Coastal', M + 100, 263, 76, CONTACT.phoneLink, false);
 
-  // 2: an accessible vector plan and opening preferences, without invented build dimensions.
+  if (imageData(secondView)) {
+    newPage('Another view of your room.', 'A complementary perspective on your chosen design.');
+    box(M, 78, CW, 106, C.paper, 2);
+    if (!graphic(secondView, M + 1, 79, CW - 2, 104)) drawPlan(M, 78, CW, 106);
+    text('The same building, viewed from the other side. The setting, furnishings and finishes are illustrative; the final specification is agreed with Coastal.', M, 192, CW, 8.3, C.muted);
+    const selections = [['Your roofline', label('roof', d.roof) + ' roof'], ['Timber finish', label('timber', d.timber)], ['Your entrance', label('glazing', d.glazing)]];
+    selections.forEach(([name, value], index) => {
+      const x = M + index * 61;
+      box(x, 211, 54, 35, C.pale, 1.5);
+      smallHeading(name, x + 4, 220, 46);
+      fit(value, x + 4, 235, 46, 11.5, 'bold');
+    });
+    text('Keep exploring: the following plan and specification set out the external dimensions, opening preferences and selected options.', M, 259, CW, 9, C.muted);
+  }
+
+  // An accessible vector plan and opening preferences, without invented build dimensions.
   newPage('A space that fits your life.', 'Review the shape, light and access before discussing the exact fit with Coastal.');
   if (imageData(plan)) { box(M, 78, CW, 117, C.paper); if (!graphic(plan, M + 2, 80, CW - 4, 113)) drawPlan(M, 78, CW, 117); }
   else drawPlan(M, 78, CW, 117);

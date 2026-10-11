@@ -161,6 +161,7 @@ function fallbackPreview(canvas, initialState) {
     update(next) { state = normaliseState(next); draw(); },
     setView() {}, reset() { draw(); },
     capture() { try { return canvas.toDataURL('image/png'); } catch { return null; } },
+    captureProposal() { return { hero: null, detail: null }; },
     dispose() { window.removeEventListener('resize', resize); },
   };
 }
@@ -196,7 +197,8 @@ export function initPreview(canvas) {
   controls.zoomSpeed = 0.75;
   controls.rotateSpeed = 0.65;
   controls.target.set(0, 1.12, 0);
-  scene.add(new THREE.HemisphereLight('#fcfaf2', '#858f78', 2.3));
+  const hemisphere = new THREE.HemisphereLight('#fcfaf2', '#858f78', 2.3);
+  scene.add(hemisphere);
   const sun = new THREE.DirectionalLight('#fff4dc', 3.4);
   sun.position.set(-5, 10, 7);
   sun.castShadow = true;
@@ -262,6 +264,11 @@ export function initPreview(canvas) {
   let animation = null;
   let frameId;
   let lastSignature = '';
+  let proposalShadowMap = null;
+  let proposalContact = null;
+  // A transparent shadow catcher merges into the studio background without
+  // exposing the far edge of the live garden's ground plane as a horizon seam.
+  const proposalGround = new THREE.ShadowMaterial({ color: '#536057', opacity: 0.18 });
 
   function material(color, extra = {}) {
     return new THREE.MeshStandardMaterial({ color, roughness: 0.8, ...extra });
@@ -625,6 +632,251 @@ export function initPreview(canvas) {
     }
   }
 
+  function getProposalContact() {
+    if (!proposalContact) {
+      const image = document.createElement('canvas');
+      image.width = image.height = 256;
+      const ctx = image.getContext('2d');
+      ctx.filter = 'blur(19px)';
+      ctx.fillStyle = '#27332d';
+      ctx.fillRect(38, 42, 180, 172);
+      const map = new THREE.CanvasTexture(image);
+      map.colorSpace = THREE.SRGBColorSpace;
+      proposalContact = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({
+        map, transparent: true, opacity: 0.14, depthWrite: false, toneMapped: false,
+      }));
+      proposalContact.rotation.x = -Math.PI / 2;
+      proposalContact.position.y = -0.018;
+      proposalContact.visible = false;
+      scene.add(proposalContact);
+    }
+    return proposalContact;
+  }
+
+  function proposalCameraFor(bounds, points, side, detail = false) {
+    const exportCamera = camera.clone();
+    exportCamera.aspect = 16 / 9;
+    exportCamera.fov = 30;
+    exportCamera.zoom = 1;
+    exportCamera.up.set(0, 1, 0);
+    const center = bounds.getCenter(new THREE.Vector3());
+    const azimuth = THREE.MathUtils.degToRad(detail ? 28 : 36) * side;
+    const elevation = THREE.MathUtils.degToRad(detail ? 11 : 12);
+    const direction = new THREE.Vector3(
+      Math.sin(azimuth) * Math.cos(elevation), Math.sin(elevation), Math.cos(azimuth) * Math.cos(elevation),
+    );
+    const right = new THREE.Vector3().crossVectors(exportCamera.up, direction).normalize();
+    const up = new THREE.Vector3().crossVectors(direction, right).normalize();
+    const tanV = Math.tan(THREE.MathUtils.degToRad(exportCamera.fov / 2));
+    const tanH = tanV * exportCamera.aspect;
+    const projected = points.map((point) => {
+      const offset = point.clone().sub(center);
+      return { x: offset.dot(right), y: offset.dot(up), depth: offset.dot(direction) };
+    });
+    const extentsAt = (distance) => {
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const point of projected) {
+        const inverseDepth = 1 / (distance - point.depth);
+        const x = point.x * inverseDepth / tanH;
+        const y = point.y * inverseDepth / tanV;
+        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+      }
+      return { minX, maxX, minY, maxY, width: maxX - minX, height: maxY - minY };
+    };
+    // Fit and centre the actual projected silhouette. A world-space cuboid
+    // centre leaves excess sky because deck and roof have different depths.
+    // A lens shift preserves the chosen architectural angle and all geometry.
+    let low = Math.max(0.5, ...projected.map((point) => point.depth)) + 0.5;
+    let high = Math.max(8, low * 2);
+    while (extentsAt(high).width > 1.6 || extentsAt(high).height > 1.68) high *= 1.5;
+    for (let step = 0; step < 22; step += 1) {
+      const middle = (low + high) / 2;
+      const extents = extentsAt(middle);
+      if (extents.width <= 1.6 && extents.height <= 1.68) high = middle;
+      else low = middle;
+    }
+    const distance = high;
+    const extents = extentsAt(distance);
+    exportCamera.position.copy(center).addScaledVector(direction, distance);
+    exportCamera.near = 0.05;
+    exportCamera.far = Math.max(100, distance * 4);
+    exportCamera.lookAt(center);
+    exportCamera.updateProjectionMatrix();
+    exportCamera.projectionMatrix.elements[8] = (extents.minX + extents.maxX) / 2;
+    exportCamera.projectionMatrix.elements[9] = (extents.minY + extents.maxY) / 2;
+    exportCamera.projectionMatrixInverse.copy(exportCamera.projectionMatrix).invert();
+    exportCamera.updateMatrixWorld(true);
+    return exportCamera;
+  }
+
+  function renderProposalImage(exportCamera) {
+    // Wide PNGs use the same request contract as the existing download. The
+    // plain studio setting compresses much better than a textured lawn.
+    for (const width of [1600, 1408, 1200, 1008]) {
+      renderer.setSize(width, width * 9 / 16, false);
+      renderer.render(scene, exportCamera);
+      const result = canvas.toDataURL('image/png');
+      if (result.length <= 1500000) return result;
+    }
+    return null;
+  }
+
+  function captureProposal() {
+    const result = { hero: null, detail: null };
+    if (disposed) return result;
+    const size = renderer.getSize(new THREE.Vector2());
+    const saved = {
+      pixelRatio: renderer.getPixelRatio(), exposure: renderer.toneMappingExposure,
+      background: scene.background, fog: scene.fog, environment: scene.environment,
+      environmentIntensity: scene.environmentIntensity, ground: ground.material,
+      dimensionsVisible: dimensions.visible, shadowType: renderer.shadowMap.type,
+      shadowAutoUpdate: renderer.shadowMap.autoUpdate, shadowNeedsUpdate: renderer.shadowMap.needsUpdate,
+      sun: { position: sun.position.clone(), target: sun.target.position.clone(), color: sun.color.clone(), intensity: sun.intensity },
+      fill: { position: fill.position.clone(), color: fill.color.clone(), intensity: fill.intensity },
+      hemisphere: { color: hemisphere.color.clone(), groundColor: hemisphere.groundColor.clone(), intensity: hemisphere.intensity },
+      shadow: {
+        map: sun.shadow.map, mapSize: sun.shadow.mapSize.clone(), radius: sun.shadow.radius,
+        bias: sun.shadow.bias, normalBias: sun.shadow.normalBias, needsUpdate: sun.shadow.needsUpdate,
+        camera: sun.shadow.camera.clone(), matrix: sun.shadow.matrix.clone(),
+      },
+    };
+    const visibility = new Map();
+    const materials = new Map();
+    garden.children.forEach((object) => visibility.set(object, object.visible));
+    building.traverse((object) => {
+      if (!object.isMesh) return;
+      visibility.set(object, object.visible);
+      for (const mat of Array.isArray(object.material) ? object.material : [object.material]) {
+        if (!mat.isMeshStandardMaterial || materials.has(mat)) continue;
+        materials.set(mat, {
+          roughness: mat.roughness, metalness: mat.metalness, envMapIntensity: mat.envMapIntensity,
+          bumpMap: mat.bumpMap, bumpScale: mat.bumpScale, color: mat.color.clone(), opacity: mat.opacity,
+        });
+      }
+    });
+    const contact = getProposalContact();
+    const contactVisible = contact.visible;
+    try {
+      renderer.setPixelRatio(1);
+      renderer.toneMappingExposure = 0.88;
+      renderer.shadowMap.type = THREE.PCFShadowMap;
+      renderer.shadowMap.autoUpdate = true;
+      scene.background = new THREE.Color('#f1f0eb');
+      scene.fog = null;
+      // Direct studio lighting keeps first exports fast on mobile and software
+      // WebGL devices; no cubemap baking or environment shader compilation.
+      scene.environment = null;
+      ground.material = proposalGround;
+      dimensions.visible = false;
+      garden.children.forEach((object) => { object.visible = object === ground; });
+      building.traverse((object) => { if (object.userData.roof) object.visible = true; });
+      materials.forEach((original, mat) => {
+        mat.envMapIntensity = mat.isMeshPhysicalMaterial ? 0.95 : 0.45;
+        if (mat.map) {
+          mat.roughness = 0.73;
+          mat.bumpMap = mat.map;
+          mat.bumpScale = 0.014;
+        } else if (mat.isMeshPhysicalMaterial) {
+          mat.color.set('#b1cecb');
+          mat.roughness = 0.08;
+          mat.metalness = 0.05;
+          mat.opacity = 0.4;
+        } else if (mat.metalness > 0.1) mat.roughness = 0.38;
+        mat.needsUpdate = true;
+      });
+      building.updateWorldMatrix(true, true);
+      const bounds = new THREE.Box3().setFromObject(building);
+      const center = bounds.getCenter(new THREE.Vector3());
+      const points = [];
+      building.traverseVisible((object) => {
+        const positions = object.isMesh && object.geometry.getAttribute('position');
+        if (!positions) return;
+        for (let i = 0; i < positions.count; i += 1) {
+          points.push(new THREE.Vector3().fromBufferAttribute(positions, i).applyMatrix4(object.matrixWorld));
+        }
+      });
+      contact.position.x = center.x;
+      contact.position.z = center.z;
+      contact.scale.set(state.width + state.canopy + 1.45, state.depth + 1.8, 1);
+      contact.visible = true;
+      hemisphere.color.set('#f6f5ef');
+      hemisphere.groundColor.set('#c6c9bf');
+      hemisphere.intensity = 0.95;
+      sun.color.set('#fff7eb');
+      sun.intensity = 2.4;
+      sun.position.set(center.x - 4, 8, 6);
+      sun.target.position.set(center.x, 1.1, 0);
+      sun.target.updateMatrixWorld(true);
+      fill.color.set('#e3edf3');
+      fill.intensity = 0.65;
+      fill.position.set(center.x + 6, 4.5, 2.5);
+      sun.shadow.map = proposalShadowMap;
+      sun.shadow.mapSize.set(1024, 1024);
+      sun.shadow.radius = 5;
+      sun.shadow.bias = -0.00015;
+      sun.shadow.normalBias = 0.02;
+      const span = Math.max(state.width + state.canopy, state.depth) + 4;
+      Object.assign(sun.shadow.camera, { left: -span / 2, right: span / 2, top: span / 2, bottom: -span / 2, near: 0.5, far: 35 });
+      sun.shadow.camera.updateProjectionMatrix();
+      sun.shadow.needsUpdate = true;
+      const heroSide = state.canopy > 0 || state.window !== 'left' ? 1 : -1;
+      result.hero = renderProposalImage(proposalCameraFor(bounds, points, heroSide));
+      result.detail = renderProposalImage(proposalCameraFor(bounds, points, -heroSide, true));
+    } catch {
+      // The PDF can still use its vector plan if this device cannot export 3D.
+    } finally {
+      proposalShadowMap = sun.shadow.map === saved.shadow.map ? proposalShadowMap : sun.shadow.map;
+      sun.shadow.map = saved.shadow.map;
+      sun.shadow.mapSize.copy(saved.shadow.mapSize);
+      sun.shadow.radius = saved.shadow.radius;
+      sun.shadow.bias = saved.shadow.bias;
+      sun.shadow.normalBias = saved.shadow.normalBias;
+      sun.shadow.needsUpdate = saved.shadow.needsUpdate;
+      sun.shadow.camera.copy(saved.shadow.camera);
+      sun.shadow.matrix.copy(saved.shadow.matrix);
+      sun.position.copy(saved.sun.position);
+      sun.target.position.copy(saved.sun.target);
+      sun.target.updateMatrixWorld(true);
+      sun.color.copy(saved.sun.color);
+      sun.intensity = saved.sun.intensity;
+      fill.position.copy(saved.fill.position);
+      fill.color.copy(saved.fill.color);
+      fill.intensity = saved.fill.intensity;
+      hemisphere.color.copy(saved.hemisphere.color);
+      hemisphere.groundColor.copy(saved.hemisphere.groundColor);
+      hemisphere.intensity = saved.hemisphere.intensity;
+      scene.background = saved.background;
+      scene.fog = saved.fog;
+      scene.environment = saved.environment;
+      scene.environmentIntensity = saved.environmentIntensity;
+      ground.material = saved.ground;
+      dimensions.visible = saved.dimensionsVisible;
+      contact.visible = contactVisible;
+      visibility.forEach((visible, object) => { object.visible = visible; });
+      materials.forEach((original, mat) => {
+        mat.roughness = original.roughness;
+        mat.metalness = original.metalness;
+        mat.envMapIntensity = original.envMapIntensity;
+        mat.bumpMap = original.bumpMap;
+        mat.bumpScale = original.bumpScale;
+        mat.color.copy(original.color);
+        mat.opacity = original.opacity;
+        mat.needsUpdate = true;
+      });
+      renderer.shadowMap.type = saved.shadowType;
+      renderer.shadowMap.autoUpdate = saved.shadowAutoUpdate;
+      renderer.toneMappingExposure = saved.exposure;
+      renderer.setSize(size.x, size.y, false);
+      renderer.setPixelRatio(saved.pixelRatio);
+      dirty = true;
+      try { renderer.render(scene, camera); } catch { /* The normal render loop retries. */ }
+      renderer.shadowMap.needsUpdate = saved.shadowNeedsUpdate;
+      sun.shadow.needsUpdate = saved.shadow.needsUpdate;
+    }
+    return result;
+  }
+
   function cameraPosition(mode) {
     const centerX = state.canopy / 2;
     const largest = Math.max(state.width + state.canopy, state.depth);
@@ -718,6 +970,7 @@ export function initPreview(canvas) {
     },
     setView(mode) { applyView(mode); setPlanVisibility(); },
     reset() { applyView('perspective'); setPlanVisibility(); },
+    captureProposal,
     capture() {
       const size = renderer.getSize(new THREE.Vector2());
       const pixelRatio = renderer.getPixelRatio();
@@ -754,6 +1007,13 @@ export function initPreview(canvas) {
       disposeGroup(garden);
       Object.values(sourceTextures).forEach((texture) => texture.dispose());
       grass.dispose();
+      proposalShadowMap?.dispose();
+      proposalGround.dispose();
+      if (proposalContact) {
+        proposalContact.geometry.dispose();
+        proposalContact.material.map.dispose();
+        proposalContact.material.dispose();
+      }
       renderer.dispose();
     },
   };
