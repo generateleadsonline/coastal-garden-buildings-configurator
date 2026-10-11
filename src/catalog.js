@@ -1,0 +1,14 @@
+export const DEFAULT = {width:4,depth:3,roof:'flat',system:'log',timber:'natural',glazing:'french',window:'right',canopy:0,insulated:false,use:'office'};
+export const OPTIONS = {
+ use:[{id:'office',name:'Work & focus',hint:'Your commute ends at the garden.',icon:'work'},{id:'retreat',name:'Relax & unwind',hint:'A little escape. A lot more you.',icon:'leaf'},{id:'studio',name:'Create & make',hint:'Give your ideas room to grow.',icon:'spark'},{id:'gym',name:'Move & recharge',hint:'Your own space to feel good.',icon:'gym'}],
+ system:[{id:'log',name:'Log cabin',hint:'Characterful interlocking timber. 10cm size increments.',tag:'Classic character'},{id:'prima',name:'Prima summerhouse',hint:'Post-and-panel construction. 60cm size increments.',tag:'Garden favourite'},{id:'pro',name:'Pro building',hint:'Flexible post-and-beam design. 10cm size increments.',tag:'Make it your own'}],
+ roof:[{id:'flat',name:'Flat',hint:'Clean, contemporary lines.'},{id:'apex',name:'Apex',hint:'A timeless pitched silhouette.'},{id:'pent',name:'Pent',hint:'A gentle, single-slope roof.'}],
+ timber:[{id:'natural',name:'Natural timber',hex:'#bb9470',hint:'Warm, honest and full of character.'},{id:'sage',name:'Garden sage',hex:'#8b9481',hint:'A calm colour, at home in the garden.'},{id:'charcoal',name:'Charcoal',hex:'#424b4c',hint:'A confident, contemporary finish.'},{id:'stone',name:'Coastal stone',hex:'#d3cec0',hint:'Light, soft and effortlessly coastal.'}],
+ glazing:[{id:'french',name:'French doors',hint:'Traditional double doors with a welcoming entrance.'},{id:'sliding',name:'Sliding doors',hint:'Wide views and a space-saving opening.'},{id:'bifold',name:'Bifold doors',hint:'An open connection between inside and out.'}],
+ window:[{id:'none',name:'No side window'},{id:'left',name:'Left side'},{id:'right',name:'Right side'},{id:'both',name:'Both sides'}]
+};
+export const label=(key,id)=>OPTIONS[key]?.find(x=>x.id===id)?.name||id;
+export function limits(s){return s.system==='prima'?{min:2.4,max:5.4,depthMax:4.2,step:.6}:{min:2.5,max:6,depthMax:s.system==='pro'&&s.roof!=='apex'?4.3:s.roof==='apex'?6:5,step:.1};}
+export function normalize(input={}){const s={...DEFAULT};for(const k of Object.keys(OPTIONS)){if(OPTIONS[k].some(x=>x.id===input[k]))s[k]=input[k];}s.canopy=input.canopy===1.5?1.5:0;s.insulated=input.insulated===true;const l=limits(s);for(const k of ['width','depth']){const v=Number(input[k]);s[k]=Number((Math.min(k==='depth'?l.depthMax:l.max,Math.max(l.min,Math.round(((Number.isFinite(v)?v:DEFAULT[k])-l.min)/l.step)*l.step+l.min))).toFixed(1));}return s;}
+export function designLink(s){return `${location.origin}${location.pathname}#design=${encodeURIComponent(btoa(JSON.stringify(normalize(s))))}`;}
+export function readLink(){try{const value=new URLSearchParams(location.hash.slice(1)).get('design');return value?normalize(JSON.parse(atob(value))):null;}catch{return null;}}
