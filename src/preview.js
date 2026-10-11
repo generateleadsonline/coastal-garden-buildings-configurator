@@ -719,8 +719,29 @@ export function initPreview(canvas) {
     setView(mode) { applyView(mode); setPlanVisibility(); },
     reset() { applyView('perspective'); setPlanVisibility(); },
     capture() {
-      renderer.render(scene, camera);
-      try { return canvas.toDataURL('image/png'); } catch { return null; }
+      const size = renderer.getSize(new THREE.Vector2());
+      const pixelRatio = renderer.getPixelRatio();
+      try {
+        // Render the same camera at print resolution, even on a small phone.
+        // Pixel ratio changes the drawing buffer without changing canvas CSS.
+        // Keep the existing PNG request contract, with headroom below the
+        // server's 1.6 million character image limit for detailed scenes.
+        for (const longestEdge of [1600, 1400, 1200, 1000, 800]) {
+          renderer.setPixelRatio(longestEdge / Math.max(size.x, size.y, 1));
+          renderer.setSize(size.x, size.y, false);
+          renderer.render(scene, camera);
+          const image = canvas.toDataURL('image/png');
+          if (image.length <= 1500000) return image;
+        }
+        return null;
+      } catch {
+        return null;
+      } finally {
+        renderer.setPixelRatio(pixelRatio);
+        renderer.setSize(size.x, size.y, false);
+        dirty = true;
+        try { renderer.render(scene, camera); } catch { /* The render loop retries. */ }
+      }
     },
     dispose() {
       disposed = true;
