@@ -34,7 +34,7 @@ function render(){
  content.querySelectorAll('[data-option]').forEach(b=>b.onclick=()=>update({...state,[b.dataset.option]:b.dataset.value}));
  content.querySelectorAll('[data-toggle]').forEach(b=>b.onclick=()=>update({...state,[b.dataset.toggle]:b.dataset.toggle==='canopy'?(state.canopy?0:1.5):!state.insulated}));
  content.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const [width,depth]=b.dataset.preset.split(',').map(Number);update({...state,width,depth});});
- content.querySelectorAll('input[type=range]').forEach(input=>input.oninput=()=>{state=normalize({...state,[input.id]:+input.value});document.querySelector(`#${input.id}-value`).innerHTML=`${state[input.id].toFixed(1)}<small> m</small>`;sync();});
+ content.querySelectorAll('input[type=range]').forEach(input=>input.oninput=()=>{state=normalize({...state,[input.id]:+input.value});quote=null;document.querySelector(`#${input.id}-value`).innerHTML=`${state[input.id].toFixed(1)}<small> m</small>`;sync();});
  document.querySelector('#lead-form')?.addEventListener('submit',submitLead);
  document.querySelector('.privacy-trigger')?.addEventListener('click',showPrivacy);
  sync();
@@ -58,7 +58,7 @@ document.querySelector('#save').onclick=()=>{sync();toast('Your design is saved 
 document.querySelector('#share').onclick=async()=>{const link=designLink(state);try{await navigator.clipboard.writeText(link);toast('Design link copied. No contact details are included.');}catch{showModal(`<h2>Your design, ready to share.</h2><p>Copy this link to save or share your design. It includes no contact details.</p><input class="share-input" aria-label="Share design link" readonly value="${esc(link)}">`);}event('design_shared');};
 document.querySelector('#visit').onclick=showVisit;document.querySelector('#privacy').onclick=showPrivacy;document.querySelector('.modal-close').onclick=()=>document.querySelector('#modal').close();document.querySelector('#modal').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.close();};
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;preview?.setView(view);document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('selected',x===b));document.querySelector('.rotate-hint').textContent=view==='plan'?'Illustrative floor plan · External dimensions':view==='front'?'Front elevation · Concept visual':'Drag to explore · Scroll to zoom';});
-document.querySelector('#reset-view').onclick=()=>preview?.reset();
+document.querySelector('#reset-view').onclick=()=>{view='perspective';preview?.reset();document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('selected',b.dataset.view===view));document.querySelector('.rotate-hint').textContent='Drag to explore · Scroll to zoom';};
 try{preview=initPreview(document.querySelector('#building'));}catch{document.querySelector('#building').hidden=true;document.querySelector('#preview-fallback').hidden=false;}
 render();event('configurator_started');
 
