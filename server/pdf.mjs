@@ -182,7 +182,7 @@ export async function generateProposal({ design, quote = {}, lead = {}, hero, pl
   text(`${CONTACT.phone} | ${CONTACT.email}`, M, 260, CW, 8.3, C.muted);
   doc.link(M, 256, CW, 5, { url: `mailto:${CONTACT.email}` });
   button(CONTACT.phone, M, 263, 51, CONTACT.phoneLink); button('Email Coastal', M + 57, 263, 54, `mailto:${CONTACT.email}`, false); button('Reopen design', M + 117, 263, 59, resume, false);
-  doc.link(M, 250, CW, 11, { url: CONTACT.web });
+  doc.link(M, 250, CW, 5, { url: CONTACT.web });
   doc.setLanguage('en-GB');
   return new Uint8Array(doc.output('arraybuffer'));
 }
