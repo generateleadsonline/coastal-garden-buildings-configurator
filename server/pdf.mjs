@@ -180,7 +180,9 @@ export async function generateProposal({ design, quote = {}, lead = {}, hero, pl
   rule(230); smallHeading('See the buildings. Talk through your ideas.', M, 241);
   text('Stewarts Christchurch Garden Centre, BH23 4SA. Please contact Coastal to check opening times and arrange your visit.', M, 250, CW, 9.3);
   text(`${CONTACT.phone} | ${CONTACT.email}`, M, 260, CW, 8.3, C.muted);
-  doc.link(M, 256, CW, 5, { url: `mailto:${CONTACT.email}` });
+  doc.link(M, 256, doc.getTextWidth(CONTACT.phone), 5, { url: CONTACT.phoneLink });
+  const emailX = M + doc.getTextWidth(`${CONTACT.phone} | `);
+  doc.link(emailX, 256, doc.getTextWidth(CONTACT.email), 5, { url: `mailto:${CONTACT.email}` });
   button(CONTACT.phone, M, 263, 51, CONTACT.phoneLink); button('Email Coastal', M + 57, 263, 54, `mailto:${CONTACT.email}`, false); button('Reopen design', M + 117, 263, 59, resume, false);
   doc.link(M, 250, CW, 5, { url: CONTACT.web });
   doc.setLanguage('en-GB');
