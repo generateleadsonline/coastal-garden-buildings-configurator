@@ -1,27 +1,14 @@
+# public/ is built from src/ by `npm run build` and committed; Netlify publishes it as it is.
+# Headers (CSP with hashes, caching, noindex) are in public/_headers, written by the build.
 [build]
-  command = "npm run build"
-  publish = "dist"
-[build.environment]
-  NODE_VERSION = "22"
+  command = ""
+  publish = "public"
+
 [functions]
-  node_bundler = "esbuild"
   directory = "netlify/functions"
-[[redirects]]
-  from = "/api/quote"
-  to = "/.netlify/functions/quote"
-  status = 200
-[[redirects]]
-  from = "/api/proposal"
-  to = "/.netlify/functions/proposal"
-  status = 200
+  node_bundler = "esbuild"
+
 [[redirects]]
   from = "/configurator/*"
   to = "/index.html"
   status = 200
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Frame-Options = "SAMEORIGIN"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

@@ -1,21 +1,22 @@
 {
   "name": "coastal-garden-buildings-configurator",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 4188",
-    "build": "vite build",
-    "test": "node --test tests/*.test.mjs"
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/",
+    "check": "node tools/build.mjs --check && node --test tests/"
   },
   "dependencies": {
     "@netlify/blobs": "11.1.4",
-    "three": "0.180.0",
-    "jspdf": "3.0.3",
-    "qrcode": "1.5.4"
+    "libphonenumber-js": "1.12.24"
   },
   "devDependencies": {
-    "vite": "7.1.9"
-  },
-  "packageManager": "pnpm@10.13.1"
+    "esbuild": "0.25.10",
+    "jspdf": "3.0.3",
+    "qrcode-generator": "1.4.4",
+    "three": "0.180.0",
+    "three-webgl1": "npm:three@0.162.0"
+  }
 }

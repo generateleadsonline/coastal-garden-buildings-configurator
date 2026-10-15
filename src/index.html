@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Design your Lugarde garden building | Coastal Garden Buildings, Christchurch</title>
+<meta name="description" content="Design a Lugarde log cabin or garden room in 3D with Coastal Garden Buildings: real sizes, real Lugarde prices, doors, windows and colours, then download your design pack.">
+<meta name="theme-color" content="#97aab0">
+<link rel="icon" href="/assets/img/coastal-logo.webp" type="image/webp">
+<link rel="preload" href="/assets/fonts/lato-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/lato-900.woff2" as="font" type="font/woff2" crossorigin>
+<style>{{css}}</style>
+<script type="application/json" id="build">{{config}}</script>
+<script type="module" src="{{app}}"></script>
+</head>
+<body>
+<a class="skip" href="#step-body">Skip to the designer</a>
+<header class="top">
+  <a class="brand" href="https://coastalgardenbuildings.co.uk/" data-cta="logo"><img src="/assets/img/coastal-logo.webp" width="94" height="64" alt="Coastal Garden Buildings, established 1979"></a>
+  <div class="top-title"><strong>Design your garden building</strong><span>Lugarde log cabins and garden rooms, from Coastal in Christchurch</span></div>
+  <nav class="top-ctas" id="top-ctas" aria-label="Talk to Coastal">
+    <button type="button" class="cta" data-cta="callback">Request a callback</button>
+    <button type="button" class="cta" data-cta="visit">Visit showroom</button>
+    <a class="cta" data-cta="brochure" href="https://coastalgardenbuildings.co.uk/wp-content/uploads/2023/09/Lugarde-garden-buildings-christchurch-dorset.pdf" target="_blank" rel="noopener">Download brochure</a>
+    <a class="cta phone" data-cta="phone" href="tel:+441425274000"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg><span>01425 274000</span></a>
+  </nav>
+  <div class="top-tools">
+    <a class="icon-btn phone-icon" data-cta="phone" href="tel:+441425274000" aria-label="Call Coastal on 01425 274000"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg></a>
+    <button type="button" class="icon-btn" id="help-btn" aria-haspopup="true" aria-expanded="false" aria-controls="help-menu" aria-label="Help"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M9.4 9.3a2.7 2.7 0 0 1 5.2.9c0 1.8-2.6 2.2-2.6 3.9M12 17.2v.1"/></svg></button>
+    <button type="button" class="icon-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="top-ctas" aria-label="Menu"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="help-menu" id="help-menu" hidden>
+      <button type="button" data-help="tour">Show me around</button>
+      <button type="button" data-help="share">Share or save this design</button>
+      <button type="button" data-help="pricing">Where the prices come from</button>
+      <button type="button" data-help="debug">3D information</button>
+    </div>
+  </div>
+</header>
+
+<main class="studio">
+  <section class="stage" id="stage" aria-label="Your design in 3D">
+    <div id="scene" class="scene"></div>
+    <div class="stage-poster" id="stage-poster" aria-hidden="true"></div>
+    <div class="stage-loader" id="stage-loader" hidden><span></span>Loading your building in 3D</div>
+    <div class="stage-fallback" id="stage-fallback" hidden>
+      <img src="/assets/img/coastal-install-2025.webp" width="960" height="1170" alt="A Lugarde garden building with glass sliding doors, installed by Coastal in 2025" loading="lazy">
+      <p id="fallback-caption">The 3D view could not load on this connection.</p>
+      <button type="button" class="btn" id="fallback-retry" hidden>Try the 3D view again</button>
+    </div>
+    <div class="stage-views" role="group" aria-label="View">
+      <button type="button" data-view="outside" aria-pressed="true">Outside</button>
+      <button type="button" data-view="inside" aria-pressed="false">Inside</button>
+      <button type="button" data-view="plan" aria-pressed="false">Plan</button>
+    </div>
+    <div class="stage-zoom" role="group" aria-label="Zoom">
+      <button type="button" data-zoom="1" aria-label="Zoom in"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button type="button" data-zoom="-1" aria-label="Zoom out"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      <button type="button" data-zoom="0" aria-label="Reset the view"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4 4v4.5h4.5"/></svg></button>
+    </div>
+    <div class="stage-hint" id="stage-hint">Drag to turn, scroll or pinch to zoom</div>
+    <div class="stage-total" id="stage-total" aria-live="polite"></div>
+  </section>
+
+  <section class="panel" aria-label="Design steps">
+    <nav class="stepper" id="stepper" aria-label="Steps"></nav>
+    <div class="step-body" id="step-body" tabindex="-1"></div>
+    <aside class="usps" id="usps" aria-label="Why Coastal"></aside>
+    <div class="panel-nav">
+      <button type="button" class="btn ghost" id="back-btn">Back</button>
+      <button type="button" class="btn primary" id="next-btn">Next</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><strong>Coastal Garden Buildings</strong>, Stewarts Christchurch Garden Centre, Lyndhurst Road, Christchurch, Dorset BH23 4SA. <a href="tel:+441425274000" data-cta="phone">01425 274000</a> &middot; <a href="mailto:info@coastalgardenbuildings.co.uk" data-cta="email">info@coastalgardenbuildings.co.uk</a></p>
+  <p class="small">Prices are Lugarde's own, read from the Lugarde configurator Coastal uses, including VAT and Lugarde's delivery to mainland England and Wales. Installation, bases and electrics are quoted by Coastal. Broomhill Garden Buildings Ltd trading as Coastal Garden Buildings.</p>
+</footer>
+
+<dialog class="sheet" id="form-dialog" aria-labelledby="form-title"></dialog>
+<dialog class="sheet" id="info-dialog" aria-labelledby="info-title"></dialog>
+<div class="tour" id="tour" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="debug3d" id="debug3d" hidden></div>
+</body>
+</html>
