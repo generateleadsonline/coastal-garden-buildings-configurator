@@ -1,4 +1,13 @@
 node_modules/
 dist/
+.env
 .netlify/
-.env*
+.qa-forms.ndjson
+qa-screens/
+/iphone-*.png
+/android-*.png
+.DS_Store
+tools/qa/output/
+# Research: keep the notes and the Lugarde product list; leave out the raw captures (Coastal's
+# pages, PDFs and photos, Lugarde's app bundle and template probes: about 120MB, re-fetchable).
+research/raw/

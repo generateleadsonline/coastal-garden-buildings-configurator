@@ -1,27 +1,14 @@
+# public/ is built from src/ by tools/build.py and committed; build.sh only checks it.
 [build]
-  command = "npm run build"
-  publish = "dist"
-[build.environment]
-  NODE_VERSION = "22"
+  command = "sh build.sh"
+  publish = "public"
+  functions = "netlify/functions"
+
 [functions]
   node_bundler = "esbuild"
-  directory = "netlify/functions"
+
+# The designer lives at /configurator/; v1 served it at /.
 [[redirects]]
-  from = "/api/quote"
-  to = "/.netlify/functions/quote"
-  status = 200
-[[redirects]]
-  from = "/api/proposal"
-  to = "/.netlify/functions/proposal"
-  status = 200
-[[redirects]]
-  from = "/configurator/*"
-  to = "/index.html"
-  status = 200
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Frame-Options = "SAMEORIGIN"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+  from = "/"
+  to = "/configurator/"
+  status = 301

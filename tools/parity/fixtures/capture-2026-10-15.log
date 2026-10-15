@@ -1,0 +1,64 @@
+log-flat base loaded, 15 designs
+  log-flat-min 1 sub, 0 canopy, 1 roofs, 0 insets
+  log-flat-3x2.5 1 sub, 0 canopy, 1 roofs, 1 insets
+  log-flat-4.4x3 1 sub, 0 canopy, 1 roofs, 4 insets
+  log-flat-6x4-68 1 sub, 0 canopy, 1 roofs, 2 insets
+  log-flat-8x5-90 1 sub, 0 canopy, 2 roofs, 2 insets
+  log-flat-12x5 1 sub, 0 canopy, 3 roofs, 2 insets
+  log-flat-20x5 1 sub, 0 canopy, 5 roofs, 1 insets
+  log-flat-canopy-right 1 sub, 1 canopy, 1 roofs, 1 insets
+  log-flat-canopy-left 1 sub, 1 canopy, 2 roofs, 1 insets
+  log-flat-canopy-right-5 1 sub, 1 canopy, 3 roofs, 1 insets
+  log-flat-canopy-left-4 1 sub, 1 canopy, 1 roofs, 1 insets
+  cx-log-3.6 1 sub, 1 canopy, 1 roofs, 0 insets
+  cx-log-3.7 1 sub, 1 canopy, 1 roofs, 0 insets
+  cx-log-3.8 1 sub, 1 canopy, 1 roofs, 0 insets
+  cx-log-3.9 1 sub, 1 canopy, 1 roofs, 0 insets
+log-apex base loaded, 6 designs
+  log-apex-3x3 1 sub, 0 canopy, 1 roofs, 1 insets
+  log-apex-4x3.8 1 sub, 0 canopy, 1 roofs, 2 insets
+  log-apex-6x5-68 1 sub, 0 canopy, 2 roofs, 1 insets
+  log-apex-10x6.5 1 sub, 0 canopy, 4 roofs, 1 insets
+  log-apex-canopy-left 1 sub, 1 canopy, 1 roofs, 1 insets
+  log-apex-canopy-left-big 1 sub, 1 canopy, 2 roofs, 1 insets
+log-pent base loaded, 3 designs
+  log-pent-2.5 1 sub, 0 canopy, 1 roofs, 1 insets
+  log-pent-5x4 1 sub, 0 canopy, 1 roofs, 1 insets
+  log-pent-8x5-68 1 sub, 0 canopy, 2 roofs, 1 insets
+prima-flat base loaded, 10 designs
+  cx-prima-3.6 1 sub, 1 canopy, 1 roofs, 0 insets
+  cx-prima-4.2 1 sub, 1 canopy, 1 roofs, 0 insets
+  prima-flat-1.8 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-flat-3x2.4 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-flat-4.2x3 1 sub, 0 canopy, 1 roofs, 3 insets
+  prima-flat-5.4x4.2 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-flat-3.6-28 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-flat-canopy-right 1 sub, 1 canopy, 1 roofs, 1 insets
+  prima-flat-canopy-left 1 sub, 1 canopy, 2 roofs, 1 insets
+  prima-flat-canopy-right-4.2 1 sub, 1 canopy, 2 roofs, 1 insets
+prima-pyramid base loaded, 3 designs
+  prima-pyr-2.4 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-pyr-4.2 1 sub, 0 canopy, 1 roofs, 1 insets
+  prima-pyr-5.4x4.2 1 sub, 0 canopy, 1 roofs, 1 insets
+pro-flat base loaded, 11 designs
+  cx-pro-3.5 1 sub, 1 canopy, 1 roofs, 0 insets
+  cx-pro-3.6 1 sub, 1 canopy, 1 roofs, 0 insets
+  pro-flat-1x1 1 sub, 0 canopy, 1 roofs, 0 insets
+  pro-flat-3x2 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-flat-3.5x3 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-flat-4x3 1 sub, 0 canopy, 1 roofs, 2 insets
+  pro-flat-6.3x4.3 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-flat-8.5x4.3 1 sub, 0 canopy, 1 roofs, 2 insets
+  pro-flat-canopy-right 1 sub, 1 canopy, 1 roofs, 1 insets
+  pro-flat-canopy-left 1 sub, 1 canopy, 1 roofs, 1 insets
+  pro-flat-canopy-right-3.6 1 sub, 1 canopy, 1 roofs, 1 insets
+pro-apex FAILED template not found: Pro System | Gable Roof
+pro-apex base loaded, 8 designs
+  pro-apex-3x2.5 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-4x3 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-4.5x4.5-40 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-8.5x4.5 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-3x4.5 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-5.8x7-40 1 sub, 0 canopy, 1 roofs, 1 insets
+  pro-apex-6.3x5.5 1 sub, 0 canopy, 1 roofs, 2 insets
+  pro-apex-6.1x5.1 1 sub, 0 canopy, 1 roofs, 1 insets

@@ -1,0 +1,392 @@
+{
+ "checked": "2026-10-15T13:50:15.500Z",
+ "designs": 56,
+ "structureFails": 0,
+ "priceFails": 0,
+ "report": [
+  {
+   "id": "log-flat-min",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "log-flat-3x2.5",
+   "problems": [],
+   "kept": [
+    "door.single.pe46h"
+   ]
+  },
+  {
+   "id": "log-flat-4.4x3",
+   "problems": [],
+   "kept": [
+    "window.picture.pj07",
+    "door.double.pe45h",
+    "window.picture.pj07",
+    "window.tiltandturn.pe47"
+   ]
+  },
+  {
+   "id": "log-flat-6x4-68",
+   "problems": [],
+   "kept": [
+    "window.tiltandturn.pe65",
+    "door.folding.vl01h"
+   ]
+  },
+  {
+   "id": "log-flat-8x5-90",
+   "problems": [],
+   "kept": [
+    "window.picture.pj25",
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "log-flat-12x5",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h",
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "log-flat-20x5",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-flat-canopy-right",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-flat-canopy-left",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "log-flat-canopy-right-5",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "log-flat-canopy-left-4",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "cx-log-3.6",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-log-3.7",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-log-3.8",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-log-3.9",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-prima-3.6",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-prima-4.2",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-pro-3.5",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "cx-pro-3.6",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "log-apex-3x3",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-apex-4x3.8",
+   "problems": [],
+   "kept": [
+    "door.double.pe24h",
+    "window.tiltandturn.pe47"
+   ]
+  },
+  {
+   "id": "log-apex-6x5-68",
+   "problems": [],
+   "kept": [
+    "door.folding.dl01h"
+   ]
+  },
+  {
+   "id": "log-apex-10x6.5",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-apex-canopy-left",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-apex-canopy-left-big",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "log-pent-2.5",
+   "problems": [],
+   "kept": [
+    "door.single.pe46h"
+   ]
+  },
+  {
+   "id": "log-pent-5x4",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "log-pent-8x5-68",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "prima-flat-1.8",
+   "problems": [],
+   "kept": [
+    "door.single.pe46h"
+   ]
+  },
+  {
+   "id": "prima-flat-3x2.4",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "prima-flat-4.2x3",
+   "problems": [],
+   "kept": [
+    "window.tiltandturn.pe65",
+    "door.double.pe50h",
+    "window.picture.pj07"
+   ]
+  },
+  {
+   "id": "prima-flat-5.4x4.2",
+   "problems": [],
+   "kept": [
+    "door.folding.vl02h"
+   ]
+  },
+  {
+   "id": "prima-flat-3.6-28",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "prima-flat-canopy-right",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "prima-flat-canopy-left",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "prima-flat-canopy-right-4.2",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "prima-pyr-2.4",
+   "problems": [],
+   "kept": [
+    "door.single.pe46h"
+   ]
+  },
+  {
+   "id": "prima-pyr-4.2",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "prima-pyr-5.4x4.2",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "pro-flat-1x1",
+   "problems": [],
+   "kept": []
+  },
+  {
+   "id": "pro-flat-3x2",
+   "problems": [],
+   "kept": [
+    "door.single.pe46h"
+   ]
+  },
+  {
+   "id": "pro-flat-3.5x3",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-flat-4x3",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200",
+    "window.tiltandturn.pe65"
+   ]
+  },
+  {
+   "id": "pro-flat-6.3x4.3",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-flat-8.5x4.3",
+   "problems": [],
+   "kept": [
+    "door.folding.vl02h",
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-flat-canopy-right",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "pro-flat-canopy-left",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-flat-canopy-right-3.6",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-apex-3x2.5",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "pro-apex-4x3",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-apex-4.5x4.5-40",
+   "problems": [],
+   "kept": [
+    "door.double.pe50h"
+   ]
+  },
+  {
+   "id": "pro-apex-8.5x4.5",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200"
+   ]
+  },
+  {
+   "id": "pro-apex-3x4.5",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  },
+  {
+   "id": "pro-apex-5.8x7-40",
+   "problems": [],
+   "kept": [
+    "door.folding.vl02h"
+   ]
+  },
+  {
+   "id": "pro-apex-6.3x5.5",
+   "problems": [],
+   "kept": [
+    "door.sliding.sd200",
+    "window.tiltandturn.pe65"
+   ]
+  },
+  {
+   "id": "pro-apex-6.1x5.1",
+   "problems": [],
+   "kept": [
+    "door.double.pe45h"
+   ]
+  }
+ ]
+}
